@@ -7,6 +7,7 @@ services:
     container_name: postgres_db
     command: -c fsync=off -c full_page_writes=off
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: test
       APP_DB_USER: admin
@@ -14,19 +15,19 @@ services:
       APP_DB_NAME: users
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 1s
-      timeout: 1s
+      interval: 4s
+      timeout: 2s
       retries: 60
     ports:
-      - 5432:5432
+      - 5432:5432  
 
   spring:
     build: ""
-    image: igivanov1728/auth-spring:latest
+    image: igivanov1728/auth-spring:1.1
     environment:
       DATABASE_USERNAME: admin
-      DATABASE_PASSWORD: admin
-      DATABASE_URL: jdbc:postgresql://localhost:5432/users
+      DATABASE_PASS: admin
+      DATABASE_URL: jdbc:postgresql://db:5432/users
     ports:
       - "8080:8080"
     depends_on:
